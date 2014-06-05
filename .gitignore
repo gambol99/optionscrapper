@@ -1,0 +1,9 @@
+#
+#   Author: Rohith
+#   Date: 2014-05-22 16:52:19 +0100 (Thu, 22 May 2014)
+#
+#  vim:ts=4:sw=4:et
+#
+
+*.gem
+*.swp
