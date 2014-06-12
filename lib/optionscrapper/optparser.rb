@@ -53,8 +53,11 @@ class OptParser
   end
 
   def method_missing(m, *args, &block)  
-    return @cursor[:parser].send( m, args, &block ) if @cursor[:parser].respond_to? m 
-    super(sym, *args, &block)
+    if @cursor[:parser].respond_to? m 
+      @cursor[:parser].send( m, args, &block ) 
+    else
+      super(sym, args, block)
+    end
   end
 
   private

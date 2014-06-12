@@ -17,7 +17,6 @@ require 'pp'
 }
 
 begin
-
   Parser = OptionScrapper::new do |o|
     o.on( '-S stack',       '--stack NAME',             'the name of the openstack you wish to connect' ) { |x|   @options[:stack]             =  x    }
     o.on( '-c CONFIG',      '--config CONFIG',          'the configuration file to read credentials' )    { |x|   @options[:config]            =  x    }
@@ -50,6 +49,3 @@ begin
 rescue SystemExit => e 
   exit e.status
 end
-
-
-
