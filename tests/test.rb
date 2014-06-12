@@ -39,7 +39,7 @@ begin
     o.command :snapshot, 'snapshot a instance within openstack' do 
       o.on( '-H HOSTNAME',    '--hostname HOSTNAME',      'the hostname of the instance being snapshot' )   { |x|   @options[:hostname]          =  x    }
       o.on( '-s NAME',        '--snapshot NAME',          'the name of the snapshot you are creating' )     { |x|   @options[:snapshot]          =  x    }
-      o.on( nil,              '--wait'                    'wait on the snapshot to complete' )              { |x|   @options[:wait]              =  true }
+      o.on( nil,              '--wait',                   'wait on the snapshot to complete' )              { |x|   @options[:wait]              =  true }
       o.on( '-f',             '--force',                  'if the snapshot image exists, delete it' )       { |x|   @options[:force]             =  true }
       o.on_command { @options[:action] = :snapshot }
     end  
