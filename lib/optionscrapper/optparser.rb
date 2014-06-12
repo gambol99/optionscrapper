@@ -36,8 +36,8 @@ class OptParser
     # step: update the cursor to the new parser
     @cursor         = parser
     # step: create a useage for this command
-    @cursor[:parser].banner = "\t%-19s : %s" % [ name, desc ]
-    @cursor[:parser].separator "\t%s" % [ hline( 72 ) ]
+    @cursor[:parser].banner = "    %s : desc: %s" % [ name, desc ]
+    @cursor[:parser].separator "    %s" % [ hline( 72 ) ]
     @cursor[:parser].separator ""
     yield if block_given?
   end
@@ -103,12 +103,12 @@ class OptParser
   def print_usage
     puts
     puts @parsers[:global][:parser] 
-    puts "\tCommands : %s" % [ hline( 50, "=" ) ] 
+    puts "    commands : %s" % [ hline( 61, "-" ) ] 
     @parsers.each_pair do |name,parser|
       next if name == :global
-      puts "\t%-10s %s" % [ name, parser[:description] ]
+      puts "    - %-10s : %s" % [ name, parser[:description] ]
     end
-    puts "\t%s" % [ hline( 61, "=" ) ] 
+    puts "    %s" % [ hline( 72, "-" ) ] 
     unless @parsers.empty?
       @cursor[:parser].separator ""
       puts 
@@ -116,6 +116,7 @@ class OptParser
         next if name == :global
         puts parser[:parser]
       end
+      exit 0
     end
   end
 
