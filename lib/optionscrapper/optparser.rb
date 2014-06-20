@@ -52,11 +52,16 @@ class OptParser
     end
   end
 
-  def method_missing(m, *args, &block)  
-    if @cursor[:parser].respond_to? m 
-      @cursor[:parser].send( m, args, &block ) 
+  def method_missing( method, *args, &block)  
+    if @cursor[:parser].respond_to? method 
+      case method 
+      when :banner=
+        @cursor[:parser].send method, args.first, &block 
+      else
+        @cursor[:parser].send method, args, &block
+      end
     else
-      super(sym, args, block)
+      super(method, args, block)
     end
   end
 
@@ -109,7 +114,7 @@ class OptParser
     puts "    commands : %s" % [ hline( 61, "-" ) ] 
     @parsers.each_pair do |name,parser|
       next if name == :global
-      puts "    - %-10s : %s" % [ name, parser[:description] ]
+      puts "    - %-24s : %s" % [ name, parser[:description] ]
     end
     puts "    %s" % [ hline( 72, "-" ) ] 
     unless @parsers.empty?
