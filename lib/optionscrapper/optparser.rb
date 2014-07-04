@@ -114,21 +114,23 @@ class OptParser
   def print_usage
     puts
     puts @parsers[:global][:parser] 
-    puts "    commands : %s" % [ hline( 61, "-" ) ] 
-    @parsers.each_pair do |name,parser|
-      next if name == :global
-      puts "    - %-24s : %s" % [ name, parser[:description] ]
-    end
-    puts "    %s" % [ hline( 72, "-" ) ] 
-    unless @parsers.empty?
-      @cursor[:parser].separator ""
-      puts 
+    if @parsers.size > 1
+      puts "    commands : %s" % [ hline( 61, "-" ) ] 
       @parsers.each_pair do |name,parser|
         next if name == :global
-        puts parser[:parser]
+        puts "    - %-24s : %s" % [ name, parser[:description] ]
       end
-      exit 0
+      puts "    %s" % [ hline( 72, "-" ) ] 
+      unless @parsers.empty?
+        @cursor[:parser].separator ""
+        puts 
+        @parsers.each_pair do |name,parser|
+          next if name == :global
+          puts parser[:parser]
+        end        
+      end
     end
+    ""
   end
 
   def hline length, symbol = '-'
