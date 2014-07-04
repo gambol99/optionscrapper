@@ -8,6 +8,7 @@ module OptionScrapper
 class OptParser 
   attr_reader :parsers
   alias_method :newline, :puts 
+  alias_method :print_usage, :usage
   
   def initialize &block 
     @parsers = initialize_parsers
