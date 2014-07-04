@@ -5,11 +5,11 @@
 #  vim:ts=2:sw=2:et
 #
 module OptionScrapper
-class OptParser 
+class OptParser
   attr_reader :parsers
-  alias_method :newline, :puts 
+  alias_method :newline, :puts
 
-  def initialize &block 
+  def initialize &block
     @parsers = initialize_parsers
     yield self if block_given?
   end
@@ -21,34 +21,34 @@ class OptParser
     batches.each_pair { |cmd,args| @parsers[cmd][:parser].parse! args }
   end
 
-  def command name, desc, &block 
+  def command name, desc, &block
     # step: create a new command parser
     label   = name.to_sym
     parser  = {
       :name         => label,
       :description  => desc,
       :parser       => ::OptionParser::new
-    } 
+    }
     # step: add a spacer to the current one
     @cursor[:parser].separator ""
     # step: add the new parser to the @parsers
     @parsers[label] = parser
     # step: update the cursor to the new parser
     @cursor         = parser
-    # step: create a useage for this command 
+    # step: create a useage for this command
     @cursor[:parser].banner = "    %s : desc: %s" % [ name, desc ]
     @cursor[:parser].separator "    %s" % [ hline( 72 ) ]
     @cursor[:parser].separator ""
     yield @cursor[:parser] if block_given?
   end
-  
-  def on_command &block 
+
+  def on_command &block
     @cursor[:on_command] = block if block_given?
   end
 
   def on *args, &block
-    @cursor[:parser].on *args do |x| 
-      yield x if block_given? 
+    @cursor[:parser].on *args do |x|
+      yield x if block_given?
     end
   end
 
@@ -57,10 +57,10 @@ class OptParser
   end
 
   def method_missing method, *args, &block
-    if @cursor[:parser].respond_to? method 
-      case method 
+    if @cursor[:parser].respond_to? method
+      case method
       when :banner=
-        @cursor[:parser].send method, args.first, &block 
+        @cursor[:parser].send method, args.first, &block
       else
         @cursor[:parser].send method, args, &block
       end
@@ -73,31 +73,31 @@ class OptParser
     puts "\n%s" % [ @parsers[:global][:parser] ]
     # step: we don't need to do this if there are no sub commands
     if @parsers.size > 1
-      puts "    commands : %s" % [ hline( 61, "-" ) ] 
+      puts "    commands : %s" % [ hline( 61, "-" ) ]
       @parsers.each_pair do |name,parser|
         next if name == :global
         puts "    - %-24s : %s" % [ name, parser[:description] ]
       end
-      puts "    %s" % [ hline( 72, "-" ) ] 
+      puts "    %s" % [ hline( 72, "-" ) ]
       @cursor[:parser].separator ""
-      newline 
+      newline
       @parsers.each_pair do |name,parser|
         next if name == :global
         puts parser[:parser]
       end
     end
-    puts "[error]: #{message}" if message 
+    puts "[error]: #{message}" if message
     newline
     ""
   end
   alias_method :print_usage, :usage
-  
+
   private
-  # method: take the command line arguments and batches them into the 
+  # method: take the command line arguments and batches them into the
   # perspective subcommand i.e global / sub1 / sub2 etc
   def batch_arguments arguments = ARGV, commands = @parsers
     # step: we iterate the command line arguments - all options are initially placed
-    # into the global arguments; when we hit a subcommand we reset the cursor 
+    # into the global arguments; when we hit a subcommand we reset the cursor
     batches = {}
     batches[:global] = []
     # step: set the cursor to the global batch
@@ -113,7 +113,7 @@ class OptParser
         @parsers[name][:on_command].call if @parsers[name].has_key? :on_command
       else
         # step: otherwise we inject into the current batch
-        cursor << arg 
+        cursor << arg
       end
     end
     batches
@@ -130,7 +130,7 @@ class OptParser
     # step: set the cursor to global - i.e. all options are initially global
     @cursor = parsers[:global]
     # step: inject a default help options for global
-    @cursor[:parser].on( '-h', '--help', 'display this usage menu' ) do 
+    @cursor[:parser].on( '-h', '--help', 'display this usage menu' ) do
       puts print_usage
       exit 0
     end
