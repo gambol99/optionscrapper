@@ -6,9 +6,8 @@
 #
 module OptionScrapper
 class OptParser 
-
   attr_reader :parsers
-
+  
   def initialize &block 
     @parsers = initialize_parsers
     yield self if block_given?
@@ -35,11 +34,11 @@ class OptParser
     @parsers[label] = parser
     # step: update the cursor to the new parser
     @cursor         = parser
-    # step: create a useage for this command
+    # step: create a useage for this command 
     @cursor[:parser].banner = "    %s : desc: %s" % [ name, desc ]
     @cursor[:parser].separator "    %s" % [ hline( 72 ) ]
     @cursor[:parser].separator ""
-    yield if block_given?
+    yield self if block_given?
   end
   
   def on_command &block 
@@ -50,6 +49,10 @@ class OptParser
     @cursor[:parser].on *args do |x| 
       yield x if block_given? 
     end
+  end
+
+  def to_s
+    print_usage
   end
 
   def method_missing( method, *args, &block)  
@@ -71,17 +74,17 @@ class OptParser
   def batch_arguments arguments = ARGV, commands = @parsers
     # step: we iterate the command line arguments - all options are initially placed
     # into the global arguments; when we hit a subcommand we reset the cursor 
-    batches          = {}
+    batches = {}
     batches[:global] = []
     # step: set the cursor to the global batch
-    cursor           = batches[:global]
+    cursor = batches[:global]
     arguments.each do |arg|
       # step: is the argument a subcommand?
       if commands.has_key? arg.to_sym
-        name          = arg.to_sym
+        name = arg.to_sym
         # step: create the new batch, reset the cursor and iterate
         batches[name] = []
-        cursor        = batches[name]
+        cursor = batches[name]
         # step: call the block if the on_command block is set
         @parsers[name][:on_command].call if @parsers[name].has_key? :on_command
         next
@@ -101,7 +104,7 @@ class OptParser
     }
     parsers[:global] = global_parser
     # step: set the cursor to global - i.e. all options are initially global
-    @cursor         = parsers[:global]
+    @cursor = parsers[:global]
     # step: inject a default help options for global
     @cursor[:parser].on( '-h', '--help', 'display this usage menu' ) { print_usage }
     # step: return the parsers
