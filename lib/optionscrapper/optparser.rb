@@ -8,8 +8,7 @@ module OptionScrapper
 class OptParser 
   attr_reader :parsers
   alias_method :newline, :puts 
-  alias_method :print_usage, :usage
-  
+
   def initialize &block 
     @parsers = initialize_parsers
     yield self if block_given?
@@ -91,7 +90,8 @@ class OptParser
     newline
     ""
   end
-
+  alias_method :print_usage, :usage
+  
   private
   # method: take the command line arguments and batches them into the 
   # perspective subcommand i.e global / sub1 / sub2 etc
