@@ -7,6 +7,7 @@
 module OptionScrapper
 class OptParser 
   attr_reader :parsers
+  alias_method :newline, :puts 
   
   def initialize &block 
     @parsers = initialize_parsers
@@ -38,7 +39,7 @@ class OptParser
     @cursor[:parser].banner = "    %s : desc: %s" % [ name, desc ]
     @cursor[:parser].separator "    %s" % [ hline( 72 ) ]
     @cursor[:parser].separator ""
-    yield self if block_given?
+    yield @cursor[:parser] if block_given?
   end
   
   def on_command &block 
@@ -52,10 +53,10 @@ class OptParser
   end
 
   def to_s
-    print_usage
+    usage
   end
 
-  def method_missing( method, *args, &block)  
+  def method_missing method, *args, &block
     if @cursor[:parser].respond_to? method 
       case method 
       when :banner=
@@ -64,8 +65,30 @@ class OptParser
         @cursor[:parser].send method, args, &block
       end
     else
-      super(method, args, block)
+      super( method, args, block )
     end
+  end
+
+  def usage message = nil
+    puts "\n%s" % [ @parsers[:global][:parser] ]
+    # step: we don't need to do this if there are no sub commands
+    if @parsers.size > 1
+      puts "    commands : %s" % [ hline( 61, "-" ) ] 
+      @parsers.each_pair do |name,parser|
+        next if name == :global
+        puts "    - %-24s : %s" % [ name, parser[:description] ]
+      end
+      puts "    %s" % [ hline( 72, "-" ) ] 
+      @cursor[:parser].separator ""
+      newline 
+      @parsers.each_pair do |name,parser|
+        next if name == :global
+        puts parser[:parser]
+      end
+    end
+    puts "[error]: #{message}" if message 
+    newline
+    ""
   end
 
   private
@@ -87,10 +110,10 @@ class OptParser
         cursor = batches[name]
         # step: call the block if the on_command block is set
         @parsers[name][:on_command].call if @parsers[name].has_key? :on_command
-        next
+      else
+        # step: otherwise we inject into the current batch
+        cursor << arg 
       end
-      # step: otherwise we inject into the current batch
-      cursor << arg 
     end
     batches
   end
@@ -106,31 +129,12 @@ class OptParser
     # step: set the cursor to global - i.e. all options are initially global
     @cursor = parsers[:global]
     # step: inject a default help options for global
-    @cursor[:parser].on( '-h', '--help', 'display this usage menu' ) { print_usage }
+    @cursor[:parser].on( '-h', '--help', 'display this usage menu' ) do 
+      puts print_usage
+      exit 0
+    end
     # step: return the parsers
     parsers
-  end
-
-  def print_usage
-    puts
-    puts @parsers[:global][:parser] 
-    if @parsers.size > 1
-      puts "    commands : %s" % [ hline( 61, "-" ) ] 
-      @parsers.each_pair do |name,parser|
-        next if name == :global
-        puts "    - %-24s : %s" % [ name, parser[:description] ]
-      end
-      puts "    %s" % [ hline( 72, "-" ) ] 
-      unless @parsers.empty?
-        @cursor[:parser].separator ""
-        puts 
-        @parsers.each_pair do |name,parser|
-          next if name == :global
-          puts parser[:parser]
-        end        
-      end
-    end
-    ""
   end
 
   def hline length, symbol = '-'
