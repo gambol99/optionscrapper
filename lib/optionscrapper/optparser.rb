@@ -86,9 +86,12 @@ class OptParser
         puts parser[:parser]
       end
     end
-    puts "[error]: #{message}" if message
+    if message
+      puts "[error]: #{message}" 
+      exit 1
+    end
     newline
-    ""
+    exit 0
   end
   alias_method :print_usage, :usage
 
