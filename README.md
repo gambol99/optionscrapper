@@ -23,6 +23,7 @@ Is a wrapper for the OptionsParser (optparse) gem which makes using subcommand l
       Parser = OptionScrapper::new do |o|
         o.on( '-S stack',       '--stack NAME',             'the name of the openstack you wish to connect' ) { |x|   @options[:stack]             =  x    }
         o.on( '-c CONFIG',      '--config CONFIG',          'the configuration file to read credentials' )    { |x|   @options[:config]            =  x    }
+        o.on( '-H',             '--hostname HOSTNAME',      'switch on verbose mode' )                        {       @options[:verbose]           =  true }
         o.on( '-v',             '--verbose',                'switch on verbose mode' )                        {       @options[:verbose]           =  true }
         o.command :launch, 'launch a instance in to openstack cluster' do 
           o.on( '-H HOSTNAME',    '--hostname HOSTNAME',      'the hostname of instance you are creating' )     { |x|   @options[:hostname]          =  x    }
@@ -51,6 +52,12 @@ Is a wrapper for the OptionsParser (optparse) gem which makes using subcommand l
       PP.pp @options
     rescue SystemExit => e 
       exit e.status
-
     end
-    
+
+Global Options
+--------------
+
+Assuming you are using subcommands, global options may be intermixed amougst the subcommands - i.e. if you have an option --dry-run in global, it can be placed anywhere within the command line options. If however, the subcommand which it is seated has the same option, the subcommand takes priority. Using the above definition as an example
+
+    ./test launch -H hostname   ; -H exists in global and launch, but launch take priority and it's his to process
+
