@@ -28,5 +28,4 @@ module OptionScrapper
       yield o if block_given?
     end
   end
-
 end
