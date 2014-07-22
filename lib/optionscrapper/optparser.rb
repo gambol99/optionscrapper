@@ -67,7 +67,8 @@ module OptionScrapper
         when :banner=
           @cursor[:parser].send method, args.first, &block
         else
-          @cursor[:parser].send method, args, &block
+          @cursor[:parser].send method, args, &block if args and !args.empty?
+          @cursor[:parser].send method, &block if !args or args.empty?
         end
       else
         super( method, args, block )

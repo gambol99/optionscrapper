@@ -7,6 +7,18 @@
 module OptionScrapper
   module Parsing
     OptionRegex = /^(-[-]?[[:alpha:]-]+)/
+    
+    def command_options name 
+      raise ArgumentError, "the command: #{name} does not exist in parsers" unless parsers.has_key? name 
+      unless @options 
+        @options = []
+        arguments = parsers[name][:parser].stack
+        arguments.each do |x|
+          @options << { :long => x.long, :short => x.short }
+        end
+      end
+      @options
+    end
 
     private
     # [ -c config launch -H rohith -i djskdjs -n 2 -f dksldkslkdsldksl --stack hq --dry-run -f mine ]

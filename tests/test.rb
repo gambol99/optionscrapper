@@ -45,6 +45,7 @@ end
 begin
   parser.parse!
   PP.pp @options
+  PP.pp @parser.command_options :launch
 rescue SystemExit => e 
   exit e.status
 rescue Exception => e 
