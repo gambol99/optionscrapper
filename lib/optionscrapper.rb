@@ -6,6 +6,7 @@
 #
 $:.unshift File.join(File.dirname(__FILE__),'.','./')
 require 'optparse'
+require 'optionscrapper/ext/optparse'
 require 'optionscrapper/version'
 require 'optionscrapper/optparser'
 
