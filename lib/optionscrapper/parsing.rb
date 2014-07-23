@@ -7,23 +7,11 @@
 module OptionScrapper
   module Parsing
     OptionRegex = /^(-[-]?[[:alpha:]-]+)/
-    
-    def command_options name 
-      raise ArgumentError, "the command: #{name} does not exist in parsers" unless parsers.has_key? name 
-      unless @options 
-        @options = []
-        arguments = parsers[name][:parser].stack
-        arguments.each do |x|
-          @options << { :long => x.long, :short => x.short }
-        end
-      end
-      @options
-    end
 
     private
     # [ -c config launch -H rohith -i djskdjs -n 2 -f dksldkslkdsldksl --stack hq --dry-run -f mine ]
     # [ -c config launch -H rohith -i djskdjs -n 2 -f dksldkslkdsldksl --dry-run -S hq ]
-    def batch_arguments arguments = ARGV, commands = parsers      
+    def batch_arguments arguments = ARGV, commands = parsers
       # step: create the batches
       batches  = { :global => [] }
       current  = :global
@@ -41,8 +29,8 @@ module OptionScrapper
           parsers[current][:on_command].call if parsers[current].has_key? :on_command
         else
           unless option? argument
-            batches[current] << argument; next 
-          end          
+            batches[current] << argument; next
+          end
           # else we are processing a command line option and we are in global
           if previous
             current  = previous
@@ -52,7 +40,7 @@ module OptionScrapper
           if !parser_option?( current, argument ) and global_option? argument
             previous = current
             current  = :global
-            batches[current] << argument 
+            batches[current] << argument
           else
             # step: otherwise we inject into the current batch
             batches[current] << argument
@@ -71,7 +59,7 @@ module OptionScrapper
       p[:description] = description if description
       p
     end
-      
+
     def command? argument
       parsers.has_key? argument.to_sym
     end
@@ -96,7 +84,7 @@ module OptionScrapper
       parsers[:global][:parser]
     end
 
-    def global_switches 
+    def global_switches
       parsers[:global][:switches]
     end
 
@@ -104,12 +92,12 @@ module OptionScrapper
       global_switches.has_key? option
     end
 
-    def parse_option_switches *args, &block 
-      if args and args.size >= 2 
+    def parse_option_switches *args, &block
+      if args and args.size >= 2
         args[0..1].each do |a|
           yield $1 if a =~ OptionRegex and block_given?
         end
-      end  
+      end
     end
   end
 end
