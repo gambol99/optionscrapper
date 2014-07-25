@@ -28,7 +28,7 @@ module OptionScrapper
         puts offset << "commands : %s" % [ horizontal_line( 61, "-" ) ]
         parsers.each_pair do |name,parsep|
           next if name == :global
-          puts offset << "%-24s : %s" % [ name, parsep[:description] ]
+          puts offset << "%-32s %s" % [ name, parsep[:description] ]
         end
         puts offset << "%s" % [ horizontal_line( 72, "-" ) ]
         newline
