@@ -19,9 +19,9 @@ module OptionScrapper
 
       arguments.each do |argument|
         # step: is the argument a subcommand?
-        if command? argument
-          #puts "SUBCOMMAND: #{argument}"
-          current  = command_name argument
+        subcommand = has_command argument
+        if subcommand
+          current  = subcommand
           previous = nil
           # step: create the new batch, reset the cursor and iterate
           batches[current] = []
@@ -55,17 +55,33 @@ module OptionScrapper
         :name     => name.to_sym,
         :parser   => ::OptionParser::new,
         :switches => {},
+        :aliases  => [],
       }
       p[:description] = description if description
       p
     end
 
-    def command? argument
-      parsers.has_key? argument.to_sym
+    def has_command argument
+      command_name = argument.to_sym
+      return command_name if command? command_name
+      alias?( command_name )
     end
 
-    def command_name argument
-      argument.to_sym
+    def command? argument
+      parsers.has_key? argument
+    end
+
+    def alias? argument
+      parsers.each_pair do |name,config|
+        next if name == :global
+        next if aliases( name ).empty?
+        return name if aliases( name ).include? argument
+      end
+      nil
+    end
+
+    def aliases parser_name
+      parsers[parser_name][:aliases]
     end
 
     def parsers

@@ -45,6 +45,10 @@ module OptionScrapper
       yield @cursor[:parser] if block_given?
     end
 
+    def command_alias name
+      @cursor[:aliases] << name
+    end
+
     def on_command &block
       @cursor[:on_command] = block if block_given?
     end

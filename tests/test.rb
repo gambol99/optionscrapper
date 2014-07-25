@@ -17,6 +17,7 @@ def parser
     o.on( nil,              '--dry-run',                'perform a dry run' )                             {       @options[:dry_run]           = true }
     o.on( '-v',             '--verbose',                'switch on verbose mode' )                        {       @options[:verbose]           = true }
     o.command :launch, 'launch a instance in to openstack cluster' do
+      o.command_alias :ln
       o.on( '-H HOSTNAME',    '--hostname HOSTNAME',      'the hostname of instance you are creating' )     { |x|   @options[:hostname]          =  x  }
       o.on( '-i IMAGE',       '--image IMAGE',            'the image you wish to boot from' )               { |x|   @options[:image]             =  x  }
       o.on( '-f FLAVOR',      '--flavor FLAVOR',          'the flavor the instance should work from' )      { |x|   @options[:flavor]            =  x  }
