@@ -30,10 +30,12 @@ def parser
       o.on_command { @options[:action] = :launch   }
     end
     o.command :destroy, 'destroy and delete an instance in openstack' do
+      o.command_alias :des
       o.on( '-H HOSTNAME',    '--hostname HOSTNAME',      'the hostname of instance you are creating' )     { |x|   @options[:hostname]          =  x    }
       o.on_command { @options[:action] = :destroy  }
     end
     o.command :snapshot, 'snapshot a instance within openstack' do
+      o.command_alias :sp
       o.on( '-H HOSTNAME',    '--hostname HOSTNAME',      'the hostname of the instance being snapshot' )   { |x|   @options[:hostname]          =  x    }
       o.on( '-s NAME',        '--snapshot NAME',          'the name of the snapshot you are creating' )     { |x|   @options[:snapshot]          =  x    }
       o.on( nil,              '--wait',                   'wait on the snapshot to complete' )              { |x|   @options[:wait]              =  true }
