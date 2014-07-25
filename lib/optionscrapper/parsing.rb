@@ -54,7 +54,7 @@ module OptionScrapper
       p = {
         :name     => name.to_sym,
         :parser   => ::OptionParser::new,
-        :switches => {}
+        :switches => {},
       }
       p[:description] = description if description
       p

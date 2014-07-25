@@ -14,7 +14,7 @@ module OptionScrapper
         # step: else we generate the full parse usage menu
         puts "\n%s" % [ parsers[:global][:parser] ]
         # step: we don't need to do this if there are no sub commands
-        subcommand_usage 
+        subcommand_usage
       end
       fail message if message
       newline
@@ -22,22 +22,30 @@ module OptionScrapper
     end
     alias_method :print_usage, :usage
     alias_method :to_s, :usage
-  
-    def subcommand_usage 
+
+    def subcommand_usage
       if parsers.size > 1
-        puts "    commands : %s" % [ horizontal_line( 61, "-" ) ]
+        puts offset << "commands : %s" % [ horizontal_line( 61, "-" ) ]
         parsers.each_pair do |name,parsep|
           next if name == :global
-          puts "    - %-24s : %s" % [ name, parsep[:description] ]
+          puts offset << "%-24s : %s" % [ name, parsep[:description] ]
         end
-        puts "    %s" % [ horizontal_line( 72, "-" ) ]
-        @cursor[:parser].separator ""
+        puts offset << "%s" % [ horizontal_line( 72, "-" ) ]
         newline
-        parsers.each_pair do |name,parsep|
-          next if name == :global
-          puts parsep[:parser]
+        parsers.each_pair do |parser_name,p|
+          # step: skip the global, we have already displayed it
+          next if parser_name == :global
+          # step: we don't need to show this if the subcommand has no options / switches
+          next if p[:switches].empty?
+          # step: else we can show the parser usage
+          puts p[:parser]
         end
       end
+    end
+
+    def offset length = 4, spacer = ""
+      length.times.each { spacer << " " }
+      spacer
     end
 
     def fail message
@@ -45,8 +53,7 @@ module OptionScrapper
       exit 1
     end
 
-    def horizontal_line length, symbol = '-'
-      line = ""
+    def horizontal_line length, symbol = '-', line = ""
       length.times.each { line << "#{symbol}" }
       line
     end
