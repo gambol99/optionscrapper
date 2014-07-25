@@ -12,7 +12,7 @@ module OptionScrapper
   class OptParser
     include OptionScrapper::Parsing
     include OptionScrapper::Usage
-    
+
     alias_method :newline, :puts
 
     def initialize &block
@@ -50,7 +50,7 @@ module OptionScrapper
     end
 
     def on *args, &block
-      # step: we are creating an array of all the 
+      # step: we are creating an array of all the
       parse_option_switches *args do |x|
         @cursor[:switches][x] = true
       end
@@ -78,6 +78,7 @@ module OptionScrapper
     def initialize_parsers
       # step: we create the global and inject the global parser into the parser hash
       parsers[:global] = parser( 'global' )
+      parsers[:global][:parser].program_name = program_name
       # step: set the cursor to global - i.e. all options are initially global
       @cursor = parsers[:global]
       # step: inject a default help options for global

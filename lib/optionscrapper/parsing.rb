@@ -99,5 +99,9 @@ module OptionScrapper
         end
       end
     end
+
+    def program_name
+      File.basename( $0 )
+    end
   end
 end

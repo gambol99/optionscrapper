@@ -22,7 +22,7 @@ module OptionScrapper
 
   def self.version
     OptionScrapper::VERSION
-  end 
+  end
 
   def self.new &block
     OptionScrapper::OptParser::new do |o|
