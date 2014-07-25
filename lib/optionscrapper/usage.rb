@@ -26,9 +26,11 @@ module OptionScrapper
     def subcommand_usage
       if parsers.size > 1
         puts offset << "commands : %s" % [ horizontal_line( 61, "-" ) ]
-        parsers.each_pair do |name,parsep|
+        parsers.each_pair do |name,par|
           next if name == :global
-          puts offset << "%-32s %s" % [ name, parsep[:description] ]
+          subcommand_name = name.to_s
+          subcommand_name << " (%s)" % [ aliases( name ).join(',') ] unless par[:aliases].empty?
+          puts offset << "%-32s %s" % [ subcommand_name, par[:description] ]
         end
         puts offset << "%s" % [ horizontal_line( 72, "-" ) ]
         newline
