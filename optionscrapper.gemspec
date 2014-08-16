@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
     s.date        = '2014-05-22'
     s.authors     = ["Rohith Jayawardene"]
     s.email       = 'gambol99@gmail.com'
-    s.homepage    = 'http://rubygems.org/gems/optionscrapper'
+    s.homepage    = 'https://github.com/gambol99/optionscrapper'
     s.summary     = %q{Options Parser with subcommand supports}
     s.description = %q{Is a wrapper for optparse which allows for using subcommand more easily}
     s.license     = 'MIT'
