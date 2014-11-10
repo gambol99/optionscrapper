@@ -1,7 +1,7 @@
-Options Scrapper!
+OptionScrapper!
 ----------------
 
-Is a wrapper for the OptionsParser (optparse) gem which makes using subcommand like cli easier to define. Note, all the options configuration is passed directly to optparse; so anything it supports, this will support; any methods missing is also passed down to optpasr i.e. banner, separator etc
+Is a wrapper for the OptionsParser (optparse) gem which makes using subcommand like cli easier to define. Note, all the options configuration is passed directly to optparse; so anything it supports, this will support;
 
     require 'optionscrapper'
     require 'pp'
@@ -98,12 +98,26 @@ Will produce the following usage menu;
             --wait                       wait on the snapshot to complete
         -f, --force                      if the snapshot image exists, delete it
 
+Or to print just the menu of the subcommand
 
+    [jest@starfury tests]$ ./test.rb ln --help
+    launch : description: launch a instance in to openstack cluster
+    ------------------------------------------------------------------------
+
+    -H, --hostname HOSTNAME          the hostname of instance you are creating
+    -i, --image IMAGE                the image you wish to boot from
+    -f, --flavor FLAVOR              the flavor the instance should work from
+    -k, --keypair KEYPAIR            the keypair the instance should use
+    -n, --network NETWORK            the network the instance should be connected
+    -s, --secgroups SECURITY         the security group assigned to the instance
+    -u, --user-data USER_DATA        the user data template
+        --hypervisor HOST            the compute node you want the instance to run
+    -e, --error                      cause an error
+    
 ----------
 
-Global Options
+Mixing Options
 --------------
-Assuming you are using subcommands, global options may be intermixed amougst the subcommands - i.e. if you have an option --dry-run in global, it can be placed anywhere within the command line options. If however, the subcommand which it is seated has the same option, the subcommand takes priority. Using the above definition as an example
 
-    ./test launch -H hostname   ; -H exists in global and launch, but launch take priority and it's his to process
+The order of the options is not enforced, thus global options can be placed anywhere on the command line. If however, there is a conflict, i.e. the subcommand has the same flag/s as a global option, the subcommand takes precedence. 
 
