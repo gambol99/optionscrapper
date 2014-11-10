@@ -20,7 +20,7 @@ module OptionScrapper
     end
 
     # alias: a subcommand alias
-    def alias(name); aliases << name.first; end
+    def alias(name); aliases << name; end
 
     #
     # on: is the standard means of adding a command line option to the parser. The method
@@ -52,8 +52,6 @@ module OptionScrapper
 
     # --- Method Aliases ---
     alias_method :command_alias, :alias
-    #alias_method :print_usage, :usage
-    #alias_method :to_s, :usage
 
     private
     def method_missing(method, *args, &block)
