@@ -5,5 +5,5 @@
 #  vim:ts=2:sw=2:et
 #
 module OptionScrapper
-  VERSION = "0.0.9"
+  VERSION = '1.0.0'
 end

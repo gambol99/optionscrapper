@@ -7,26 +7,20 @@
 $:.unshift File.join(File.dirname(__FILE__),'.','./')
 require 'optparse'
 require 'optionscrapper/ext/optparse'
-require 'optionscrapper/version'
-require 'optionscrapper/optparser'
+require 'optionscrapper/optionsparser'
 
 module OptionScrapper
   ROOT = File.expand_path File.dirname __FILE__
 
   require "#{ROOT}/optionscrapper/version"
 
-  autoload :Version,    "#{ROOT}/optionscrapper/version"
-  autoload :Parser,     "#{ROOT}/optionscrapper/optparser"
-
-  @version = OptionScrapper::VERSION
-
   def self.version
     OptionScrapper::VERSION
   end
 
-  def self.new &block
-    OptionScrapper::OptParser::new do |o|
-      yield o if block_given?
+  def self.new
+    OptionScrapper::OptionsParser::new do |x|
+      yield x if block_given?
     end
   end
 end
