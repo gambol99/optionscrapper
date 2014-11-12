@@ -55,7 +55,7 @@ Is a wrapper for the OptionsParser (optparse) gem which makes using subcommand l
       end
     end
 
-Will produce the following usage menu;
+Will produce the following usage menu. Note, the -h|--help is injected in the default parser by default
 
     [jest@starfury tests]$ ./test.rb --help
 
