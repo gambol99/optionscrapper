@@ -19,7 +19,7 @@ module OptionScrapper
     GLOBAL_OPTION_REGEX  = /^(-[-]?[[:alpha:]-]+)/
 
     attr_accessor :parsers
-    def_delegator :@cursor,  :on
+    def_delegators :@cursor, :command_alias, :alias, :on
 
     def initialize
       @cursor  = nil
@@ -28,7 +28,7 @@ module OptionScrapper
       create_parser(GLOBAL_PARSER,'the global parser')
       @cursor.parser.program_name = prog_name
       # step: inject a default help options for global
-      @cursor.parser.on( '-h', '--help', 'display this usage menu' ) do
+      @cursor.parser.on_tail( '-h', '--help', 'display this usage menu' ) do
         puts print_usage
         exit 0
       end
@@ -97,10 +97,7 @@ module OptionScrapper
     alias_method :print_usage, :usage
 
     def method_missing(method, *args, &block)
-      if @cursor.respond_to? method
-        @cursor.send method, args, &block if args and !args.empty?
-        @cursor.send method, &block if !args or args.empty?
-      elsif @cursor.parser.respond_to? method
+      if @cursor.parser.respond_to? method
         @cursor.parser.send method, args, &block if args and !args.empty?
         @cursor.parser.send method, &block if !args or args.empty?
       else
