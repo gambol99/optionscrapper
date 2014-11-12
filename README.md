@@ -113,11 +113,20 @@ Or to print just the menu of the subcommand
     -u, --user-data USER_DATA        the user data template
         --hypervisor HOST            the compute node you want the instance to run
     -e, --error                      cause an error
-    
+
 ----------
 
 Mixing Options
 --------------
 
-The order of the options is not enforced, thus global options can be placed anywhere on the command line. If however, there is a conflict, i.e. the subcommand has the same flag/s as a global option, the subcommand takes precedence. 
+The order of the options is not enforced, thus global options can be placed anywhere on the command line. If however, there is a conflict, i.e. the subcommand has the same flag/s as a global option, the subcommand takes precedence.
 
+Contributing
+------------
+
+ - Fork it
+ - Create your feature branch (git checkout -b my-new-feature)
+ - Commit your changes (git commit -am 'Add some feature')
+ - Push to the branch (git push origin my-new-feature)
+ - Create new Pull Request
+ - If applicable, update the README.md
