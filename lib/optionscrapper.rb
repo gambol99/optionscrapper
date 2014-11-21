@@ -4,15 +4,14 @@
 #
 #  vim:ts=2:sw=2:et
 #
-$:.unshift File.join(File.dirname(__FILE__),'.','./')
+require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'optparse'
-require 'optionscrapper/ext/optparse'
-require 'optionscrapper/optionsparser'
 
 module OptionScrapper
   ROOT = File.expand_path File.dirname __FILE__
 
-  require "#{ROOT}/optionscrapper/version"
+  autoload :Version, "#{ROOT}/optionscrapper/version"
+  autoload :OptionsParser,  "#{ROOT}/optionscrapper/optionsparser"
 
   def self.version
     OptionScrapper::VERSION

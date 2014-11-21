@@ -5,11 +5,12 @@
 #
 #  vim:ts=2:sw=2:et
 #
-$:.unshift File.join(File.dirname(__FILE__),'.')
-require 'misc/utils'
+$:.unshift File.join(File.dirname(__FILE__),'./')
+require 'optionscrapper/ext/optparse'
+require 'optionscrapper/misc/utils'
+require 'optionscrapper/parser'
+require 'optionscrapper/batch'
 require 'forwardable'
-require 'parser'
-require 'batch'
 
 module OptionScrapper
   class OptionsParser
